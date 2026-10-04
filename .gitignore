@@ -1,0 +1,17 @@
+# Build outputs
+bin/
+obj/
+
+# User-specific files
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Logs
+*.log
+*.binlog
+
+# OS-generated files
+.DS_Store
+Thumbs.db
