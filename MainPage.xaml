@@ -13,6 +13,9 @@
             <DatePicker Date="{Binding DateNaissance, Mode=TwoWay}"/>
             <Button Text="Calculer"
                     Command="{Binding CalculerCommand}"/>
+            <Button Text="Effacer"
+                    BackgroundColor="Gray"
+                    Command="{Binding EffacerCommand}"/>
             <Label Text="{Binding Resultat}" FontSize="20"
                    IsVisible="{Binding ResultatVisible}"/>
             <Label Text="{Binding Message}" FontSize="18" TextColor="Gray"
