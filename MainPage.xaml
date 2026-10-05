@@ -20,6 +20,8 @@
                    IsVisible="{Binding ResultatVisible}"/>
             <Label Text="{Binding Message}" FontSize="18" TextColor="Gray"
                    IsVisible="{Binding ResultatVisible}"/>
+            <Label Text="{Binding Anniversaire}" FontSize="18" TextColor="Gray"
+                   IsVisible="{Binding ResultatVisible}"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

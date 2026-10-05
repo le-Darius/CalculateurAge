@@ -8,6 +8,7 @@ public class CalculateurViewModel : BaseViewModel
     private DateTime _dateNaissance = DateTime.Today.AddYears(-20);
     private string _resultat = "";
     private string _message = "";
+    private string _anniversaire = "";
     private bool _resultatVisible;
 
     // Propriétés publiques : ce que le XAML voit.
@@ -34,6 +35,13 @@ public class CalculateurViewModel : BaseViewModel
     {
         get => _message;
         set => SetField(ref _message, value);
+    }
+
+    // Fonctionnalité 3 : jours avant le prochain anniversaire.
+    public string Anniversaire
+    {
+        get => _anniversaire;
+        set => SetField(ref _anniversaire, value);
     }
 
     public bool ResultatVisible
@@ -64,9 +72,25 @@ public class CalculateurViewModel : BaseViewModel
         if (DateNaissance.Date > DateTime.Today.AddYears(-age)) age--;
 
         Resultat = $"{Nom}, vous avez {age} ans";
-        Message = age < 0 ? "Date de naissance dans le futur"
-                : age >= 18 ? "Majeur"
-                : "Mineur";
+
+        if (age < 0)
+        {
+            Message = "Date de naissance dans le futur";
+            Anniversaire = "";
+        }
+        else
+        {
+            Message = age >= 18 ? "Majeur" : "Mineur";
+
+            int jours = JoursAvantAnniversaire(DateNaissance);
+            Anniversaire = jours switch
+            {
+                0 => "Joyeux anniversaire ! C'est aujourd'hui !",
+                1 => "Prochain anniversaire : demain",
+                _ => $"Prochain anniversaire dans {jours} jours"
+            };
+        }
+
         ResultatVisible = true;
     }
 
@@ -77,6 +101,28 @@ public class CalculateurViewModel : BaseViewModel
         DateNaissance = DateTime.Today.AddYears(-20);
         Resultat = "";
         Message = "";
+        Anniversaire = "";
         ResultatVisible = false;
+    }
+
+    // Nombre de jours entre aujourd'hui et le prochain anniversaire.
+    private static int JoursAvantAnniversaire(DateTime naissance)
+    {
+        DateTime aujourdhui = DateTime.Today;
+        DateTime prochain = AnniversaireEn(naissance, aujourdhui.Year);
+        if (prochain < aujourdhui)
+            prochain = AnniversaireEn(naissance, aujourdhui.Year + 1);
+        return (prochain - aujourdhui).Days;
+    }
+
+    // Date de l'anniversaire pour une année donnée.
+    // Le 29 février devient le 28 les années non bissextiles.
+    private static DateTime AnniversaireEn(DateTime naissance, int annee)
+    {
+        int jour = naissance.Month == 2 && naissance.Day == 29
+                   && !DateTime.IsLeapYear(annee)
+            ? 28
+            : naissance.Day;
+        return new DateTime(annee, naissance.Month, jour);
     }
 }
